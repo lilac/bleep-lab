@@ -1,0 +1,48 @@
+$schema: https://raw.githubusercontent.com/oyvindberg/bleep/master/schema.json
+$version: 0.0.12
+jvm:
+  name: graalvm-community:23.0.1
+projects:
+  cli:
+    dependencies: com.lihaoyi::fansi:0.5.0
+    folder: ./cli
+    scala:
+      options: -encoding utf8 -feature -unchecked
+      strict: true
+      version: 3.3.5
+    platform:
+      name: jvm
+      mainClass: com.foo.App
+  native:
+    dependencies: com.lihaoyi::fansi:0.5.0
+    extends: template-common
+    folder: ./native
+    platform:
+      mainClass: com.foo.App
+      nativeLinkingOptions: ["-o", "foo-app"]
+  scripts:
+    dependencies:
+      - build.bleep::bleep-core:0.0.12
+      - build.bleep::bleep-plugin-native-image:0.0.12
+    extends: template-common
+    platform:
+      name: jvm
+      mainClass: com.foo.BuildNative
+  tests:
+    dependencies: org.scalameta::munit:1.1.0
+    dependsOn: native
+    extends: template-common
+    isTestProject: true
+    platform:
+      name: jvm
+      testFramework: munit.Framework
+templates:
+  template-common:
+    platform:
+      name: native
+      nativeGc: immix
+      nativeVersion: 0.5.6
+    scala:
+      options: -encoding utf8 -feature -unchecked
+      strict: true
+      version: 3.3.5
