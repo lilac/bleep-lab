@@ -1,4 +1,4 @@
-package com.foo.jvm
+package com.foo
 
 import fansi._
 
